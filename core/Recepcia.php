@@ -132,6 +132,7 @@ class Recepcia{
     $adress = $data['adress'];
     $note = $data['note'];
     $user_add = $data['user_add'];
+    $age = $data['age'];
     
 
     $checkEmail = $this->checkExistEmail($email);
@@ -153,7 +154,7 @@ class Recepcia{
         return $msg;
     }else{
 
-      $sql = "INSERT INTO tbl_recepcia(name, username, email, mobile,adress, note,user_add) VALUES(:name, :username, :email, :mobile, :adress, :note, :user_add)";
+      $sql = "INSERT INTO tbl_recepcia(name, username, email, mobile,adress, note,user_add, age) VALUES(:name, :username, :email, :mobile, :adress, :note, :user_add, :age)";
       $stmt = $this->db->pdo->prepare($sql);
       $stmt->bindValue(':name', $name);
       $stmt->bindValue(':username', $username);
@@ -162,14 +163,15 @@ class Recepcia{
       $stmt->bindValue(':adress', $adress);
       $stmt->bindValue(':note', $note);
       $stmt->bindValue(':user_add', $user_add);
+      $stmt->bindValue(':age', $age);
       $result = $stmt->execute();
       if ($result) {
-        $msg = '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
+        $msg = '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: greenyellow;">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
   <strong>Hotovo !</strong> Registrácia úspešná !</div>';
           return $msg;
       }else{
-        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
+        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
   <strong>Error !</strong> Ups.. Niečo je zle!</div>';
           return $msg;

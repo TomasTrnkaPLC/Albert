@@ -1,10 +1,10 @@
 <?php
 
-include 'Database.php';
+
 include_once 'Session.php';
 
 
-class Users{
+class Klient{
 
 
   // Db Property
@@ -123,65 +123,30 @@ class Users{
 
 
   }
-  // Add New User By Admin
+  
   public function addNewUserByAdmin($data){
-    $name = $data['name'];
-    $username = $data['username'];
-    $email = $data['email'];
-    $mobile = $data['mobile'];
-    $roleid = $data['roleid'];
-    $password = $data['password'];
+    $meno = $data['meno'];
+    $priezvisko = $data['priezvisko'];
+    $vek = $data['vek'];
+    $note = $data['note'];
+    $izba = $data['izba'];
+    $blood_type = $data['blood_type'];
+    $kontakt = $data['kontakt'];
+    $adresa = $data['adresa'];
+    $bio = $data['bio'];
 
-    $checkEmail = $this->checkExistEmail($email);
-
-    if ($name == "" || $username == "" || $email == "" || $mobile == "" || $password == "") {
-      $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
-<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-<strong>Error !</strong> Polia nesmú byť prázdnbe!</div>';
-        return $msg;
-    }elseif (strlen($username) < 3) {
-      $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
-<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-<strong>Error !</strong> Meno je krátke minimálne 3 písmená</div>';
-        return $msg;
-    }elseif (filter_var($mobile,FILTER_SANITIZE_NUMBER_INT) == FALSE) {
-      $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
-<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-<strong>Error !</strong> Kontakt musí obsahovať len písmená!</div>';
-        return $msg;
-
-    }elseif(strlen($password) < 5) {
-      $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
-<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-<strong>Error !</strong> Heslo musí mať aspoň 6 znakov !</div>';
-        return $msg;
-    }elseif(!preg_match("#[0-9]+#",$password)) {
-      $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
-<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-<strong>Error !</strong> Heslo musí obsahovať aspoň 1 číslo !</div>';
-        return $msg;
-   
-    }elseif (filter_var($email, FILTER_VALIDATE_EMAIL === FALSE)) {
-      $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
-<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-<strong>Error !</strong> Zlá mailová adresa!</div>';
-        return $msg;
-    }elseif ($checkEmail == TRUE) {
-      $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
-<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-<strong>Error !</strong> Email už existuje... !</div>';
-        return $msg;
-    }else{
-
-      $sql = "INSERT INTO tbl_users(name, username, email, password, mobile, roleid) VALUES(:name, :username, :email, :password, :mobile, :roleid)";
-      $stmt = $this->db->pdo->prepare($sql);
-      $stmt->bindValue(':name', $name);
-      $stmt->bindValue(':username', $username);
-      $stmt->bindValue(':email', $email);
-      $stmt->bindValue(':password', SHA1($password));
-      $stmt->bindValue(':mobile', $mobile);
-      $stmt->bindValue(':roleid', $roleid);
-      $result = $stmt->execute();
+    $sql = "INSERT INTO tbl_klient (meno, priezvisko, vek, note,izba, blood_type,kontakt, adresa, bio) VALUES(:meno, :priezvisko, :vek, :note, :izba, :blood_type, :kontakt, :adresa, :bio)";
+    $stmt = $this->db->pdo->prepare($sql);
+    $stmt->bindValue(':meno', $meno);
+    $stmt->bindValue(':priezvisko', $priezvisko);
+    $stmt->bindValue(':vek', $vek);
+    $stmt->bindValue(':note', $note);
+    $stmt->bindValue(':izba', $izba);
+    $stmt->bindValue(':blood_type', $blood_type);
+    $stmt->bindValue(':kontakt', $kontakt);
+    $stmt->bindValue(':adresa', $adresa);
+    $stmt->bindValue(':bio', $bio);
+    $result = $stmt->execute();
       if ($result) {
         $msg = '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: greenyellow;">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -190,23 +155,75 @@ class Users{
       }else{
         $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Chyba !</strong> Ups.. Niečo je zle!</div>';
+  <strong>Error !</strong> Ups.. Niečo je zle!</div>';
           return $msg;
       }
-
-
-
     }
 
 
+  public function addcaretype($data){
+        $item = $data['item'];
+        $note = $data['note'];
+        $link = $data['link'];
+    
+        $sql = "INSERT INTO tbl_care_type (item, note, link) VALUES(:item,:note,:link)";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindValue(':item', $item);
+        $stmt->bindValue(':note', $note);
+        $stmt->bindValue(':link', $link);
+      
+        $result = $stmt->execute();
+          if ($result) {
+            $msg = '<div class="alert alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: greenyellow;">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>Hotovo !</strong> Oprácia úspešná !</div>';
+              return $msg;
+          }else{
+            $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>Chyba !</strong> Ups.. Niečo je zle!</div>';
+              return $msg;
+          }
+    }
 
+    public function addcaretypetoklient($data){
+      $care_type = $data['care_type'];
+      $client_id = $data['client_id'];
+      $status = $data['status'];
+  
+      $sql = "INSERT INTO klient_care_list (care_type, client_id, care_time, status) VALUES(:care_type,:client_id,:care_time,:status)";
+      $stmt = $this->db->pdo->prepare($sql);
+      $stmt->bindValue(':care_type', $care_type);
+      $stmt->bindValue(':client_id', $client_id);
+      $stmt->bindValue(':care_time', $care_time);
+      $stmt->bindValue(':status', $status);
+    
+      $result = $stmt->execute();
+        if ($result) {
+          $msg = '<div class="alert alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: greenyellow;">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Hotovo !</strong> Oprácia úspešná !</div>';
+            return $msg;
+        }else{
+          $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Chyba !</strong> Ups.. Niečo je zle!</div>';
+            return $msg;
+        }
+  }
 
-
+  
+  // Select All care
+  public function selectAllCare(){
+    $sql = "SELECT * FROM tbl_care_type ORDER BY id DESC";
+    $stmt = $this->db->pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
   }
 
 // Select Role
   public function selectRole($role){
-  $sql = "SELECT * FROM tbl_roles WHERE id = :roles LIMIT 1";
+  $sql = "SELECT *FROM tbl_roles WHERE id = :roles LIMIT 1";
   $stmt = $this->db->pdo->prepare($sql);
   $stmt->bindValue(':roles', $role);
   $stmt->execute();
@@ -214,27 +231,34 @@ class Users{
     $data = $row['role'];
   }
   return $data;
-
-}
-//Select Full name
-public function selectfullname($role){
-  $sql = "SELECT * FROM tbl_users WHERE id = :roles LIMIT 1"; 
+  }
+ //Select Client name
+ 
+ public function selectClientName($role){
+  $sql = "SELECT *FROM tbl_klient WHERE id = :roles LIMIT 1";
   $stmt = $this->db->pdo->prepare($sql);
   $stmt->bindValue(':roles', $role);
   $stmt->execute();
   while($row = $stmt->fetch()) {
-    $name= $row['name'];
-    $last_name = $row['username'];
+    $meno = $row['meno'];
+    $priezvisko = $row['priezvisko'];
   }
-  $data = $name .' '. $last_name;
+  $data = $meno.' '.$priezvisko;
   return $data;
+  }
 
-}
+  public function selectAllcareForKlient($role){
+    $sql = "SELECT * FROM klient_care_list WHERE client_id = :roles ORDER BY care_time DESC";
+    $stmt = $this->db->pdo->prepare($sql);
+    $stmt->bindValue(':roles', $role);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+  }
 
 
   // Select All User Method
   public function selectAllUserData(){
-    $sql = "SELECT * FROM tbl_users ORDER BY id DESC";
+    $sql = "SELECT * FROM tbl_klient ORDER BY id DESC";
     $stmt = $this->db->pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -264,72 +288,10 @@ public function selectfullname($role){
 
 
 
-    // User Login Authotication Method
-    public function userLoginAuthotication($data){
-      $email = $data['email'];
-      $password = $data['password'];
-
-
-      $checkEmail = $this->checkExistEmail($email);
-
-      if ($email == "" || $password == "" ) {
-        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
-  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Error !</strong> Email alebo heslo musia byt vyplnené!</div>';
-          return $msg;
-
-      }elseif (filter_var($email, FILTER_VALIDATE_EMAIL === FALSE)) {
-        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
-  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Error !</strong> Chybná mailová adresa !</div>';
-          return $msg;
-      }elseif ($checkEmail == FALSE) {
-        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
-  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Error !</strong> Žiadna emailova adresa sa nenašla!</div>';
-          return $msg;
-      }else{
-
-
-        $logResult = $this->userLoginAutho($email, $password);
-        $chkActive = $this->CheckActiveUser($email);
-
-        if ($chkActive == TRUE) {
-          $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Chyba !</strong> Váš účet bol deaktivovaný!</div>';
-            return $msg;
-        }elseif ($logResult) {
-
-          Session::init();
-          Session::set('login', TRUE);
-          Session::set('id', $logResult->id);
-          Session::set('roleid', $logResult->roleid);
-          Session::set('name', $logResult->name);
-          Session::set('email', $logResult->email);
-          Session::set('username', $logResult->username);
-          Session::set('logMsg', '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: greenyellow;">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Hotovo !</strong> Prihlásenie úspešné !</div>');
-          echo "<script>location.href='index.php';</script>";
-
-        }else{
-          $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Chyba !</strong> Email alebo heslo nie je platné !</div>';
-            return $msg;
-        }
-
-      }
-
-
-    }
-
-
 
     // Get Single User Information By Id Method
     public function getUserInfoById($userid){
-      $sql = "SELECT * FROM tbl_users WHERE id = :id LIMIT 1";
+      $sql = "SELECT * FROM tbl_klient WHERE id = :id LIMIT 1";
       $stmt = $this->db->pdo->prepare($sql);
       $stmt->bindValue(':id', $userid);
       $stmt->execute();
@@ -342,7 +304,21 @@ public function selectfullname($role){
 
 
     }
-
+        // Get Single User Information By Id Method
+    public function getCareInfoById($userid){
+          $sql = "SELECT * FROM tbl_care_type WHERE id = :id LIMIT 1";
+          $stmt = $this->db->pdo->prepare($sql);
+          $stmt->bindValue(':id', $userid);
+          $stmt->execute();
+          $result = $stmt->fetch(PDO::FETCH_OBJ);
+          if ($result) {
+            return $result;
+          }else{
+            return false;
+          }
+    
+    
+        }
 
 
   //
@@ -357,24 +333,24 @@ public function selectfullname($role){
 
 
       if ($name == "" || $username == ""|| $email == "" || $mobile == ""  ) {
-        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Error !</strong> Polia nesmú byť prázdne !</div>';
+  <strong>Error !</strong> POlia nesmú byť prázdne !</div>';
           return $msg;
         }elseif (strlen($username) < 3) {
-          $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+          $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Error !</strong> Meno je krátke. Aspoň 3 písmená !</div>';
             return $msg;
         }elseif (filter_var($mobile,FILTER_SANITIZE_NUMBER_INT) == FALSE) {
-          $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+          $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Error !</strong> Len čísla!</div>';
             return $msg;
 
 
       }elseif (filter_var($email, FILTER_VALIDATE_EMAIL === FALSE)) {
-        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
   <strong>Error !</strong> Zlá emailová adresa!</div>';
           return $msg;
@@ -398,7 +374,7 @@ public function selectfullname($role){
 
         if ($result) {
           echo "<script>location.href='index.php';</script>";
-          Session::set('msg', '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: greenyellow;">
+          Session::set('msg', '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
           <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
           <strong>Hotovo !</strong> Aktualizácia úspešná!</div>');
 
@@ -406,7 +382,7 @@ public function selectfullname($role){
 
         }else{
           echo "<script>location.href='index.php';</script>";
-          Session::set('msg', '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+          Session::set('msg', '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Error !</strong> Ups. Niečo je zle !</div>');
 
@@ -419,7 +395,49 @@ public function selectfullname($role){
 
     }
 
+    public function updatecareByIdInfo($userid, $data){
+      $item = $data['item'];
+      $note = $data['note'];
+      $link = $data['link'];
+     
 
+
+        $sql = "UPDATE tbl_care_type SET
+          item = :item,
+          note = :note,
+          link = :link
+         
+          WHERE id = :id";
+          $stmt= $this->db->pdo->prepare($sql);
+          $stmt->bindValue(':item', $item);
+          $stmt->bindValue(':note', $note);
+          $stmt->bindValue(':link', $link);
+          $stmt->bindValue(':id', $userid);
+          
+        $result =   $stmt->execute();
+
+        if ($result) {
+          echo "<script>location.href='index.php';</script>";
+          Session::set('msg', '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>Hotovo !</strong> Aktualizácia úspešná!</div>');
+
+
+
+        }else{
+          echo "<script>location.href='index.php';</script>";
+          Session::set('msg', '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Error !</strong> Ups. Niečo je zle !</div>');
+
+
+        
+
+
+      }
+
+
+    }
 
 
     // Delete User by Id Method
@@ -429,12 +447,12 @@ public function selectfullname($role){
       $stmt->bindValue(':id', $remove);
         $result =$stmt->execute();
         if ($result) {
-          $msg = '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: greenyellow;">
+          $msg = '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Hotovo !</strong> Zamestnanec je fuč !</div>';
             return $msg;
         }else{
-          $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+          $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Error !</strong> Ups. Niečo je zle !</div>';
             return $msg;
@@ -454,13 +472,13 @@ public function selectfullname($role){
        $result =   $stmt->execute();
         if ($result) {
           echo "<script>location.href='index.php';</script>";
-          Session::set('msg', '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: greenyellow; ">
+          Session::set('msg', '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
           <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          <strong>Hotovo !</strong> Užívaťel bol deaktivovaný !</div>');
+          <strong>Úspech !</strong> Užívaťel bol deaktivovaný !</div>');
 
         }else{
           echo "<script>location.href='index.php';</script>";
-          Session::set('msg', '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+          Session::set('msg', '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Chyba !</strong> DUpss niečo sa pokazilo !</div>');
 
@@ -481,14 +499,14 @@ public function selectfullname($role){
        $result =   $stmt->execute();
         if ($result) {
           echo "<script>location.href='index.php';</script>";
-          Session::set('msg', '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: greenyellow;">
+          Session::set('msg', '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
           <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          <strong>Hotovo !</strong> Užívaťel bol deaktivovaný !</div>');
+          <strong>Úspech !</strong> Užívaťel bol deaktivovaný !</div>');
         }else{
           echo "<script>location.href='index.php';</script>";
-          Session::set('msg', '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+          Session::set('msg', '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Chyba !</strong> Upss niečo sa pokazilo !</div>');
+    <strong>Chyba !</strong> DUpss niečo sa pokazilo !</div>');
 
         }
     }
@@ -521,22 +539,22 @@ public function selectfullname($role){
 
 
       if ($old_pass == "" || $new_pass == "" ) {
-        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Chyba !</strong> Heslo nesmie byť prázdne!</div>';
+  <strong>Error !</strong> Heslo nesmie byť prázdne!</div>';
           return $msg;
       }elseif (strlen($new_pass) < 6) {
-        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+        $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Chyba!</strong> Nové heslo musí mať aspoň 6 znakov !</div>';
+  <strong>Error !</strong> Nové heslo musí mať aspoň 6 znakov !</div>';
           return $msg;
        }
 
          $oldPass = $this->CheckOldPassword($userid, $old_pass);
          if ($oldPass == FALSE) {
-           $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+           $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-     <strong>Chyba !</strong> Staré heslo sa nezhoduje!</div>';
+     <strong>Error !</strong> Staré heslo sa nezhoduje!</div>';
              return $msg;
          }else{
            $new_pass = SHA1($new_pass);
@@ -552,12 +570,12 @@ public function selectfullname($role){
 
           if ($result) {
             echo "<script>location.href='index.php';</script>";
-            Session::set('msg', '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: greenyellow;">
+            Session::set('msg', '<div class="alert alert-Hotovo alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong>Hotovo !</strong> Zmena hesla úspešná !</div>');
 
           }else{
-            $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20; background-color: red;">
+            $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg" style=" z-index: 20;">
       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       <strong>Error !</strong> Ups niečo je zle !</div>';
               return $msg;
