@@ -48,7 +48,7 @@ if (isset($activeId)) {
 
           <!--start breadcrumb-->
           <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Zoznam užívatelov</div>
+            <div class="breadcrumb-title pe-3">Zoznam úkonov</div>
             <div class="ps-3">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0 align-items-center">
@@ -69,23 +69,20 @@ if (isset($activeId)) {
 							<table id="example2" class="table table-striped table-bordered">
 								<thead>
 									<tr>
-										<th  class="text-center">SL</th>
-										<th  class="text-center">Meno</th>
-										<th  class="text-center">Priezvisko</th>
-										<th  class="text-center">Vek</th>
-										<th  class="text-center">Email</th>
-										<th  class="text-center">Telefón</th>
-										<th  class="text-center">Adresa</th>
+										<th  class="text-center">id</th>
+										<th  class="text-center">Názov</th>
+										<th  class="text-center">Popis</th>
 										<th  class="text-center">Poznámka</th>
-										<th  class="text-center">Dátum vytvorenia</th>
-										<th  width='25%' class="text-center">Pridal</th>
+										<?php if (Session::get('roleid')  == '1') {?>
+										<th  class="text-center">Edituj</th><?php } ?>
+									
 									</tr>
 									
 								</thead>
 								<tbody>
 											<?php
 
-											$allUser = $recepcia->selectAllUserData();
+											$allUser = $klient->selectAllCare();
 
 											if ($allUser) {
 												$i = 0;
@@ -101,16 +98,12 @@ if (isset($activeId)) {
 											>
 
 												<td><?php echo $i; ?></td>
-												<td><?php echo $value->name; ?></td>
-												<td><?php echo $value->username; ?> <br>
-												<td><?php echo $value->age; ?> <br>
-												<td><?php echo $value->email; ?> <br>
-												<td><?php echo $value->mobile; ?> <br>
-                                                <td><?php echo $value->adress; ?> <br>
-												<td><?php echo $value->note; ?> <br>
-												<td><?php echo $value->created_at; ?> <br>
-												<td><?php echo $users->selectfullname($value->user_add); ?> <br>
-												</td>
+												<td><?php echo $value->item; ?></td>
+												<td><?php echo $value->link; ?></td>
+												<td><?php echo $value->note; ?></td>
+												<?php if (Session::get('roleid')  == '1') {?>
+													<td><a class="btn btn-success btn-sm" href="care_edit.php?id=<?php echo $value->id;?>">Uprav</a></td>
+												<?php } ?>
 											</tr>
 											<?php }}else{ ?>
 											<tr class="text-center">

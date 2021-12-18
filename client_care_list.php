@@ -36,7 +36,10 @@ if (isset($_GET['active'])) {
 if (isset($activeId)) {
   echo $activeId;
 }
-
+if (isset($_GET['id'])) {
+	$clientid = preg_replace('/[^a-zA-Z0-9-]/', '', (int)$_GET['id']);
+  
+  }
 
  ?>
 
@@ -48,44 +51,43 @@ if (isset($activeId)) {
 
           <!--start breadcrumb-->
           <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Zoznam užívatelov</div>
+            <div class="breadcrumb-title pe-3">Zoznam klientov</div>
             <div class="ps-3">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0 align-items-center">
                   <li class="breadcrumb-item"><a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
                   </li>
-                  <li class="breadcrumb-item active" aria-current="page">Zoznam</li>
+                  <li class="breadcrumb-item active" aria-current="page">Zoznam úkonov pre klienta <b> <?php echo $klient->selectClientName($clientid); ?></b></li>
                 </ol>
               </nav>
             </div>
 		   </div>
           <!--end breadcrumb-->
-
+              
 				
 				<hr/>
 				<div class="card">
 					<div class="card-body">
+					<td><a class="btn btn-success btn-sm" href="add_care_for_customer_detail.php?id=<?php echo $clientid;?>">Pridaj starostlivosť</a></td>
 						<div class="table-responsive">
 							<table id="example2" class="table table-striped table-bordered">
 								<thead>
 									<tr>
 										<th  class="text-center">SL</th>
-										<th  class="text-center">Meno</th>
-										<th  class="text-center">Priezvisko</th>
-										<th  class="text-center">Vek</th>
-										<th  class="text-center">Email</th>
-										<th  class="text-center">Telefón</th>
-										<th  class="text-center">Adresa</th>
+										<th  class="text-center">Úkon</th>
+										<th  class="text-center">Planovaný čas </th>
+										<th  class="text-center">Čas úkonu</th>
+										<th  class="text-center">Ošetrovaťeľ</th>
 										<th  class="text-center">Poznámka</th>
-										<th  class="text-center">Dátum vytvorenia</th>
-										<th  width='25%' class="text-center">Pridal</th>
+										<th  class="text-center">Status</th>
+										
 									</tr>
 									
 								</thead>
 								<tbody>
 											<?php
 
-											$allUser = $recepcia->selectAllUserData();
+											$allUser = $klient->selectAllcareForKlient($clientid);
 
 											if ($allUser) {
 												$i = 0;
@@ -101,16 +103,13 @@ if (isset($activeId)) {
 											>
 
 												<td><?php echo $i; ?></td>
-												<td><?php echo $value->name; ?></td>
-												<td><?php echo $value->username; ?> <br>
-												<td><?php echo $value->age; ?> <br>
-												<td><?php echo $value->email; ?> <br>
-												<td><?php echo $value->mobile; ?> <br>
-                                                <td><?php echo $value->adress; ?> <br>
-												<td><?php echo $value->note; ?> <br>
-												<td><?php echo $value->created_at; ?> <br>
-												<td><?php echo $users->selectfullname($value->user_add); ?> <br>
-												</td>
+												<td><?php echo $value->care_type; ?> </td>
+												<td><?php echo $value->care_time; ?> </td>
+												<td><?php echo $value->care_done; ?> </td>
+												<td><?php echo $value->user_id; ?> </td>
+												<td><?php echo $value->note; ?> </td>
+												<td><?php echo $value->status; ?> </td>
+											
 											</tr>
 											<?php }}else{ ?>
 											<tr class="text-center">

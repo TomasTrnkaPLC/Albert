@@ -54,7 +54,7 @@ if (isset($logout)) {
     
  <!--start wrapper-->
     <div class="wrapper">
-      <div class="">
+    
         <div class="row g-0 m-0">
         <div class="col-xl-6 col-lg-12">
           <div class="login-cover-wrapper">
@@ -98,7 +98,7 @@ if (isset($logout)) {
         </div>
       </div><!--end row-->
     </div>
-     </div>
+     
   <!--end wrapper-->
 
 
